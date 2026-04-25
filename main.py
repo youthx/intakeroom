@@ -4,10 +4,13 @@ import random
 import textwrap
 from flask import Flask, render_template, request, redirect, url_for, session
 from huggingface_hub import InferenceClient
+from dotenv import load_dotenv
 
 # ==================== CONFIG ====================
 
-API_KEY = "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"
+load_dotenv()
+
+API_KEY = os.getenv("API_KEY")
 MODEL_NAME = "meta-llama/Meta-Llama-3-8B-Instruct"
 VISITS_PER_CLIENT = 3
 WRAP_WIDTH = 80
