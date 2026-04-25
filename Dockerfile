@@ -25,5 +25,4 @@ COPY . .
 # Expose port (Render/Fly will map this automatically)
 EXPOSE 10000
 
-# Start the app with Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:${PORT}", "app:app"]
+CMD gunicorn --bind 0.0.0.0:$PORT app:app
