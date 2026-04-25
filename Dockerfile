@@ -1,0 +1,29 @@
+# Use a lightweight Python base image
+FROM python:3.11-slim
+
+# Prevent Python from writing .pyc files
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies (needed for gunicorn)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first (better caching)
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application
+COPY . .
+
+# Expose port (Render/Fly will map this automatically)
+EXPOSE 10000
+
+# Start the app with Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app"]
